@@ -1,50 +1,36 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Spec Kit Week 2 Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality & Modularity
+All application code MUST maintain clean separation of concerns across presentation (HTML), styling (CSS), and logic (JavaScript). Global scope pollution MUST be avoided; logic MUST be encapsulated in modular, single-responsibility functions. Pure functions SHOULD be prioritized for business logic, deterministic calculations, and data transformations.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Testability & Verification
+Every functional unit (e.g., quote selection, randomization, favorites toggling, persistence serialization) MUST be designed to be independently verifiable and testable. Side effects and persistent storage (`localStorage`) MUST be abstracted or decoupled so components can be tested deterministically without dependency on real browser session state. Edge cases—including empty data lists, repeated user clicks, and storage quota exceptions—MUST be accounted for and verifiable.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Maintainability & Readable Architecture
+Code readability is paramount: identifiers MUST be descriptive and self-documenting, avoiding cryptic abbreviations. Magic numbers and hardcoded configuration strings MUST be extracted into explicit constants. Comments MUST focus on explaining non-obvious design decisions, constraints, or platform quirks rather than reiterating self-evident syntax.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Defensive Programming & State Integrity
+All persistent state transitions and user inputs MUST be validated before updating application state. Browser storage operations MUST include defensive error handling (`try...catch`) to gracefully handle private browsing restrictions, corrupted data, or quota errors without unhandled exceptions. Application state MUST remain minimal, coherent, and synchronized with UI rendering at all times.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Minimal Dependencies & Durable Simplicity
+The project MUST adhere to YAGNI (You Aren't Gonna Need It) and the principle of least power. Third-party frameworks and build tools MUST NOT be introduced when standard, native web platform APIs (HTML5, modern CSS, vanilla ES6+ JavaScript) suffice. Solutions MUST favor simplicity, minimal runtime overhead, and long-term durability.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technical Standards & Quality Constraints
+- Web Platform Standards: Strictly semantic HTML5 structure (using `<main>`, `<blockquote>`, `<cite>`, and `<button>`), accessible styling, and modern vanilla JavaScript.
+- Accessibility & UX: All interactive elements MUST be keyboard navigable and provide appropriate ARIA attributes or semantic affordances for screen readers.
+- Performance: Assets MUST be lightweight and load instantaneously without layout shifts or unnecessary external network requests.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Quality Gates & Review Workflow
+- Static Review: Code MUST be syntactically valid and free of console errors, warnings, and dead code before passing review.
+- Spec Convergence: Implementations MUST satisfy every requirement specified in the active spec and technical plan before reaching convergence.
+- Spec-First Iteration: When defects or ambiguous behaviors are discovered, the specification or plan MUST be refined first before applying code fixes, ensuring durable design documentation.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This Constitution is the supreme authority for code standards, testing policies, and architectural decisions within this repository. All specifications, technical plans, task breakdowns, and implementations generated by AI agents or human contributors MUST comply with these principles.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Amendments to this constitution require documentation of the rationale, version incrementation following Semantic Versioning (MAJOR for removals/redefinitions, MINOR for additions, PATCH for clarifications), and recording of ratification dates.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-10-12 | **Last Amended**: 2026-10-12
+
