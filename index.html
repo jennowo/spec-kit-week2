@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inspirational quote of the day with cycling and favoriting functionality.">
+  <title>Quote of the Day</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <span class="app-badge">Daily Inspiration</span>
+      <h1>Quote of the Day</h1>
+    </header>
+
+    <main id="quote-card" aria-live="polite">
+      <div class="quote-symbol" aria-hidden="true">&ldquo;</div>
+      <div class="quote-content">
+        <blockquote id="quote-text">Loading inspirational quote...</blockquote>
+        <cite id="quote-author">&mdash;</cite>
+      </div>
+
+      <div class="quote-actions">
+        <button id="new-quote-btn" type="button" class="btn btn-primary">
+          <span class="btn-icon" aria-hidden="true">&#x21bb;</span>
+          <span>New quote</span>
+        </button>
+
+        <button id="favorite-btn" type="button" class="btn btn-favorite" aria-pressed="false" aria-label="Toggle favorite for current quote">
+          <span id="favorite-status" class="star-icon" aria-hidden="true">&#x2606;</span>
+          <span id="favorite-label">Favorite</span>
+        </button>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>Spec-driven development with <strong>GitHub Spec Kit</strong></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

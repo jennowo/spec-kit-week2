@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Test Runner: Quote of the Day</title>
+  <style>
+    body { font-family: monospace; padding: 2rem; background: #1e1e2e; color: #cdd6f4; line-height: 1.5; }
+    h1 { color: #89b4fa; }
+    .pass { color: #a6e3a1; font-weight: bold; }
+    .fail { color: #f38ba8; font-weight: bold; }
+    .summary { margin-top: 1.5rem; padding: 1rem; border-top: 1px solid #45475a; }
+  </style>
+</head>
+<body>
+  <h1>Quote of the Day - Unit Test Runner</h1>
+  <div id="results">Running tests...</div>
+
+  <script src="../app.js"></script>
+  <script>
+    const resultsDiv = document.getElementById('results');
+    const logs = [];
+    let passed = 0;
+    let total = 0;
+
+    function assert(cond, msg) {
+      if (!cond) throw new Error(msg || "Assertion failed");
+    }
+
+    function test(name, fn) {
+      total++;
+      try {
+        fn();
+        passed++;
+        logs.push(`<div class="pass">&#x2713; PASS: ${name}</div>`);
+      } catch (err) {
+        logs.push(`<div class="fail">&#x2717; FAIL: ${name} - ${err.message}</div>`);
+      }
+    }
+
+    // Run tests
+    test("Catalog has >= 5 valid quotes", () => {
+      assert(Array.isArray(DEFAULT_QUOTES), "Catalog is array");
+      assert(DEFAULT_QUOTES.length >= 5, "At least 5 quotes");
+      DEFAULT_QUOTES.forEach(q => {
+        assert(q.id && q.text && q.author, "All fields present");
+      });
+    });
+
+    test("Non-consecutive randomizer", () => {
+      let current = DEFAULT_QUOTES[0];
+      for (let i = 0; i < 50; i++) {
+        const next = getRandomQuote(DEFAULT_QUOTES, current.id);
+        assert(next.id !== current.id, "Never same consecutively");
+        current = next;
+      }
+    });
+
+    test("Favorite state toggling", () => {
+      const set = new Set();
+      const r1 = toggleFavoriteState(set, "q1");
+      assert(r1.isFavorited === true && set.has("q1"), "Added");
+      const r2 = toggleFavoriteState(set, "q1");
+      assert(r2.isFavorited === false && !set.has("q1"), "Removed");
+    });
+
+    test("StorageAdapter persistence and recovery", () => {
+      const adapter = createStorageAdapter(window.localStorage, "test_qotd_favs");
+      adapter.saveFavorites(["q1", "q2"]);
+      const favs = adapter.getFavorites();
+      assert(favs.includes("q1") && favs.includes("q2"), "Favorites preserved");
+      localStorage.removeItem("test_qotd_favs");
+    });
+
+    resultsDiv.innerHTML = logs.join('') + `
+      <div class="summary">
+        <strong>${passed} / ${total} tests passed.</strong>
+      </div>
+    `;
+  </script>
+</body>
+</html>
+
