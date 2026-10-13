@@ -2,8 +2,8 @@
 
 **Feature**: [Quote of the Day Specification](spec.md)  
 **Plan**: [Implementation Plan](plan.md)  
-**Date**: 2026-10-12  
-**Status**: Completed  
+**Date**: 2026-10-12 (Updated: 2026-10-12)  
+**Status**: Ready for Implementation (Refined)  
 
 ---
 
@@ -27,7 +27,7 @@
 - [X] T005 [P] Implement `StorageAdapter` module wrapping browser `localStorage` with `try...catch` handling, storage key `"quote_app_favorites"`, and in-memory fallback in `app.js`
 - [X] T006 [P] Create standalone test runner script for assertions on catalog structure and storage fallback in `tests/app.test.js`
 
-**Checkpoint**: Foundation ready — User Story 1 implementation can now begin.
+**Checkpoint**: Foundation ready — User Story implementation can proceed.
 
 ---
 
@@ -81,17 +81,35 @@
 - [X] T017 [US3] Connect `StorageAdapter.saveFavorites` to `toggleFavorite` to persist favorite IDs to `localStorage` in `app.js`
 - [X] T018 [US3] Implement page initialization logic to load existing favorites from `StorageAdapter.getFavorites` into `AppState.favorites` in `app.js`
 
-**Checkpoint**: All three user stories are functional and persist state correctly.
+**Checkpoint**: User Stories 1, 2, and 3 are functional and persist state correctly.
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 6: User Story 4 - View All Favorited Quotes in a Dedicated List (Priority: P2)
+
+**Goal**: A visitor can view a visible list of all favorited quotes (including full quote text and author attribution) in a dedicated section that updates dynamically in real time and restores upon page reload.
+
+**Independent Test**: Favorite one or more quotes and verify that `#favorites-list` displays each favorited quote with its text and author. When no quotes are favorited, confirm `#favorites-empty` displays "No favorite quotes yet." Reload the page and verify that all favorited quotes remain rendered in the list.
+
+### Tests for User Story 4
+- [ ] T019 [P] [US4] Implement unit test verifying `getFavoritedQuotes(catalog, favoriteIds)` correctly filters and returns quote objects matching the active favorite IDs in `tests/app.test.js`
+
+### Implementation for User Story 4
+- [ ] T020 [US4] Implement helper function `getFavoritedQuotes(catalog, favoriteIds)` in `app.js`
+- [ ] T021 [US4] Add semantic favorites section markup (`<section id="favorites-section">`, `<h2 id="favorites-heading">`, `<p id="favorites-empty">`, `<ul id="favorites-list">`) in `index.html`
+- [ ] T022 [US4] Style `#favorites-section`, `#favorites-empty`, `#favorites-list`, and `.favorite-item` list elements in `styles.css`
+- [ ] T023 [US4] Implement `renderFavoritesList()` method in `QuoteApp` and wire it to page initialization and `toggleFavorite()` state changes in `app.js`
+
+**Checkpoint**: User Story 4 is fully functional; users have a visible, persistent list of all their favorite quotes.
+
+---
+
+## Phase 7: Polish & Cross-Cutting Concerns
 
 **Purpose**: Improvements that affect multiple user stories, accessibility, and end-to-end verification
 
-- [X] T019 [P] Verify full keyboard accessibility (`Tab`, `Enter`, `Space`) and WCAG 2.1 AA focus rings on all interactive buttons in `styles.css` and `index.html`
-- [X] T020 Verify defensive handling when `localStorage` is restricted or blocked, ensuring in-memory fallback without runtime exceptions in `app.js`
-- [X] T021 Execute all manual validation scenarios from `specs/001-quote-of-the-day/quickstart.md` and verify automated test suite passes via `node tests/app.test.js`
+- [ ] T024 [P] Verify accessibility attributes and semantic markup on favorites list (`<ul>`, `aria-labelledby`, focus visibility) in `index.html` and `styles.css`
+- [ ] T025 Execute end-to-end quickstart scenarios from `specs/001-quote-of-the-day/quickstart.md` (including Scenarios 6 and 7) and verify test suite passes via `python3 tests/test_app.py`
 
 ---
 
@@ -101,17 +119,22 @@
 
 - **Setup (Phase 1)**: Completed.
 - **Foundational (Phase 2)**: Completed.
-- **User Stories (Phase 3+)**: Completed in priority order (P1 → P2 → P3).
-- **Polish (Phase 6)**: Completed.
+- **User Stories 1-3 (Phases 3-5)**: Completed.
+- **User Story 4 (Phase 6)**: Builds on favorites state from US2 and persistence from US3.
+- **Polish (Phase 7)**: Depends on completion of User Story 4.
 
-### User Story Dependencies
+### Parallel Opportunities
 
-- **User Story 1 (P1)**: Completed standalone MVP.
-- **User Story 2 (P2)**: Completed interactive favorite toggle.
-- **User Story 3 (P3)**: Completed resilient localStorage persistence.
+- `T019` (Test) can run in parallel with `T021` (HTML markup) and `T022` (CSS styles).
+- `T024` (Accessibility check) can run in parallel with `T025` (Verification run).
 
 ---
 
-## Implementation Summary
+## Implementation Strategy
 
-All 21 tasks across all phases have been implemented and verified. The working page adheres to the specification, technical plan, and project constitution.
+1. Implement test `T019` in `tests/app.test.js`.
+2. Implement logic `T020` in `app.js`.
+3. Add markup `T021` in `index.html`.
+4. Add styles `T022` in `styles.css`.
+5. Integrate `renderFavoritesList()` `T023` in `app.js`.
+6. Run polish and verification `T024`–`T025`.
