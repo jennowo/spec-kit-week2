@@ -1,15 +1,23 @@
-Prompts
+## Prompts
 
-$ /speckit-constitution Create principles focused on code quality, testing, and maintainability.
+'''
+/speckit-constitution Create principles focused on code quality, testing, and maintainability.
+'''
+
+The output had leftover template text, and I had to ask for a cleanup.
+
+'''
+/speckit-specify
+'''
 
 
 
-Refinement (before/after)
+## Refinement (before/after)
 
 
 
-Convergence
+## Convergence
 
 
 
-What I learned
+## What I learned
