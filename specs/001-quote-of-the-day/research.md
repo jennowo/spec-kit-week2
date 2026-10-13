@@ -1,7 +1,7 @@
 # Technical Research: Quote of the Day
 
 **Feature**: [Quote of the Day Specification](spec.md)  
-**Date**: 2026-10-12  
+**Date**: 2026-10-12 (Updated: 2026-10-12)  
 **Status**: Completed  
 
 ---
@@ -43,3 +43,12 @@
 - **Alternatives Considered**:
   - *Custom `<div>` or `<span>` clickables*: Rejected because custom elements lack built-in accessibility semantics and keyboard listeners.
 
+---
+
+### Research Topic 5: Visible Favorites List Architecture (Refinement)
+
+- **Decision**: Add a dedicated semantic `<section id="favorites-section">` directly below the quote card containing an empty-state message container (`#favorites-empty`) and a semantic list (`<ul id="favorites-list">`). Rendering is driven reactively from `AppState.favorites` joined against the static quote catalog.
+- **Rationale**: Fulfills User Story 4 and FR-010 through FR-014. Rendering directly on the page provides immediate visibility without hidden modals or extra navigation clicks. Clean declarative DOM updates ensure sub-100ms updates (SC-006) and accessible semantic structure (SC-008).
+- **Alternatives Considered**:
+  - *Popup Modal / Drawer*: Rejected because requiring extra clicks to open a modal creates friction and obscures the primary quote card.
+  - *Inline badge count only*: Rejected because it does not show the actual quote text and author requested by the user.

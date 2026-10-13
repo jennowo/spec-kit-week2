@@ -1,7 +1,7 @@
 # Quickstart Validation Guide: Quote of the Day
 
 **Feature**: [Quote of the Day Specification](spec.md)  
-**Date**: 2026-10-12  
+**Date**: 2026-10-12 (Updated: 2026-10-12)  
 **Status**: Ready  
 
 This guide provides step-by-step scenarios to validate the implementation end-to-end.
@@ -63,3 +63,22 @@ This guide provides step-by-step scenarios to validate the implementation end-to
   - All interactive buttons have visible focus rings and respond to keyboard triggers.
   - If storage is blocked, the app continues to display quotes and toggles favorites in-memory without uncaught runtime exceptions.
 
+### Scenario 6: Visible Favorites List & Real-Time Sync (Refinement - US4)
+- **Action**:
+  1. Observe the "Saved Favorites" section (`#favorites-section`) when no quotes are favorited.
+  2. Confirm `#favorites-empty` displays: "No favorite quotes yet."
+  3. Click "Favorite" on the current quote.
+  4. Observe the favorites list.
+  5. Click "Favorite" again to unfavorite the quote.
+- **Expected Outcome**:
+  - When empty, `#favorites-empty` is visible and `#favorites-list` has 0 items.
+  - Upon favoriting, `#favorites-empty` is hidden and the quote immediately appears in `#favorites-list` showing both quote text and author attribution.
+  - Upon unfavoriting, the quote is removed from `#favorites-list` and the empty-state message reappears.
+
+### Scenario 7: Favorites List Restoration Across Reload (Refinement - US4)
+- **Action**:
+  1. Favorite two different quotes.
+  2. Confirm both quotes appear in the "Saved Favorites" list.
+  3. Hard refresh the page (Ctrl+R / Cmd+Shift+R).
+- **Expected Outcome**:
+  - Both quotes remain displayed in `#favorites-list` with their quote text and author after reload.
