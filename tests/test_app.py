@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Python verification test for Quote of the Day
-Validates index.html structure, contracts, styles.css rules, and app.js catalog.
+Validates index.html structure, contracts, styles.css rules, and app.js catalog and functions.
 """
 import re
 import sys
@@ -17,8 +17,11 @@ def test_index_html():
     assert '<button id="new-quote-btn"' in html, "Missing #new-quote-btn element"
     assert '<button id="favorite-btn"' in html, "Missing #favorite-btn element"
     assert 'aria-pressed=' in html, "Missing aria-pressed attribute"
+    assert '<section id="favorites-section"' in html, "Missing #favorites-section element (US4)"
+    assert 'id="favorites-empty"' in html, "Missing #favorites-empty element (US4)"
+    assert '<ul id="favorites-list"' in html, "Missing #favorites-list element (US4)"
     assert 'app.js' in html, "Missing app.js script tag"
-    print("✓ PASS: index.html DOM structure conforms to contracts")
+    print("✓ PASS: index.html DOM structure conforms to contracts (including US4 favorites list)")
 
 def test_styles_css():
     with open("styles.css", "r", encoding="utf-8") as f:
@@ -28,6 +31,8 @@ def test_styles_css():
     assert "#new-quote-btn" in css or ".btn-primary" in css, "Missing button styles"
     assert ".favorited" in css, "Missing .favorited active state class"
     assert ":focus-visible" in css, "Missing :focus-visible accessibility rule"
+    assert ".favorites-section" in css, "Missing .favorites-section style rule (US4)"
+    assert ".favorite-item" in css, "Missing .favorite-item style rule (US4)"
     print("✓ PASS: styles.css contains required accessibility and UI rules")
 
 def test_app_js():
@@ -47,7 +52,9 @@ def test_app_js():
     # Check key functions exist
     assert "function getRandomQuote" in js, "Missing getRandomQuote function"
     assert "function toggleFavoriteState" in js, "Missing toggleFavoriteState function"
-    assert "function createStorageAdapter" in js, "Missing createStorageAdapter function"
+    assert "function getFavoritedQuotes" in js, "Missing getFavoritedQuotes function (US4)"
+    assert "renderFavoritesList" in js, "Missing renderFavoritesList method (US4)"
+    assert "createStorageAdapter" in js, "Missing createStorageAdapter function"
     assert "localStorage" in js, "Missing localStorage persistence logic"
     assert "try" in js and "catch" in js, "Missing defensive try/catch error handling"
     print(f"✓ PASS: app.js contains valid quotes catalog ({len(id_matches)} items) and required modules")
@@ -62,4 +69,3 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n✗ FAIL: {e}")
         sys.exit(1)
-

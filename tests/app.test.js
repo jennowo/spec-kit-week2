@@ -29,7 +29,8 @@ const {
   DEFAULT_QUOTES,
   getRandomQuote,
   createStorageAdapter,
-  toggleFavoriteState
+  toggleFavoriteState,
+  getFavoritedQuotes
 } = require('../app.js');
 
 let totalTests = 0;
@@ -125,11 +126,28 @@ runTest("StorageAdapter handles restricted/throwing localStorage gracefully", ()
   const adapter = createStorageAdapter(failingStorage, "test_favorites");
 
   assert.strictEqual(adapter.isStorageAvailable(), false);
-  // Should not throw and should maintain in-memory store
   assert.doesNotThrow(() => {
     adapter.saveFavorites(["q2"]);
   });
   assert.deepStrictEqual(adapter.getFavorites(), ["q2"]);
+});
+
+// 5. Favorites List Tests (US4)
+runTest("getFavoritedQuotes returns full quote objects for matching IDs", () => {
+  const favIds = new Set(["q1", "q3"]);
+  const results = getFavoritedQuotes(DEFAULT_QUOTES, favIds);
+  assert.strictEqual(results.length, 2);
+  assert.strictEqual(results[0].id, "q1");
+  assert.strictEqual(results[1].id, "q3");
+  assert(typeof results[0].text === 'string' && results[0].text.length > 0);
+  assert(typeof results[0].author === 'string' && results[0].author.length > 0);
+  assert(typeof results[1].text === 'string' && results[1].text.length > 0);
+  assert(typeof results[1].author === 'string' && results[1].author.length > 0);
+});
+
+runTest("getFavoritedQuotes returns empty array when no favorites match", () => {
+  const results = getFavoritedQuotes(DEFAULT_QUOTES, new Set(["non-existent"]));
+  assert.deepStrictEqual(results, []);
 });
 
 console.log(`\nResults: ${passedTests}/${totalTests} tests passed.`);
@@ -138,4 +156,3 @@ if (process.exitCode) {
 } else {
   console.log("All unit tests passed successfully!");
 }
-

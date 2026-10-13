@@ -20,6 +20,9 @@ Refinement prompt:
 What changed in the spec:
 User Story 4 was added to spec.md describing a favorites list.
 
+What changed in tasks:
+Added tasks for a favorites section
+
 After:
 
 ## Convergence

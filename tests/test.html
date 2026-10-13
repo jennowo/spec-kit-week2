@@ -71,6 +71,13 @@
       localStorage.removeItem("test_qotd_favs");
     });
 
+    test("getFavoritedQuotes resolves full Quote objects (US4)", () => {
+      const favs = new Set(["q1", "q2"]);
+      const resolved = getFavoritedQuotes(DEFAULT_QUOTES, favs);
+      assert(resolved.length === 2, "Resolves 2 quotes");
+      assert(resolved[0].text && resolved[0].author, "Quote text and author present");
+    });
+
     resultsDiv.innerHTML = logs.join('') + `
       <div class="summary">
         <strong>${passed} / ${total} tests passed.</strong>
@@ -79,4 +86,3 @@
   </script>
 </body>
 </html>
-

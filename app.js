@@ -93,6 +93,18 @@ function toggleFavoriteState(favoritesSet, quoteId) {
 }
 
 /**
+ * Resolves full Quote objects for active favorite IDs (FR-010, FR-011)
+ * @param {Array} catalog - Array of Quote objects
+ * @param {Set<string>|Array<string>} favoriteIds - Set or array of active quote IDs
+ * @returns {Array} Array of matching Quote objects
+ */
+function getFavoritedQuotes(catalog, favoriteIds) {
+  if (!catalog || !favoriteIds) return [];
+  const idSet = favoriteIds instanceof Set ? favoriteIds : new Set(favoriteIds);
+  return catalog.filter(quote => idSet.has(quote.id));
+}
+
+/**
  * Creates a defensive StorageAdapter wrapping browser localStorage
  * Gracefully degrades to an in-memory fallback if storage is disabled or quota exceeded
  * @param {Storage} storage - localStorage or mock storage object
@@ -178,7 +190,10 @@ class QuoteApp {
       newQuoteBtn: document.getElementById("new-quote-btn"),
       favoriteBtn: document.getElementById("favorite-btn"),
       favoriteStatus: document.getElementById("favorite-status"),
-      favoriteLabel: document.getElementById("favorite-label")
+      favoriteLabel: document.getElementById("favorite-label"),
+      favoritesSection: document.getElementById("favorites-section"),
+      favoritesEmpty: document.getElementById("favorites-empty"),
+      favoritesList: document.getElementById("favorites-list")
     };
 
     if (!this.elements.newQuoteBtn || !this.elements.favoriteBtn) {
@@ -190,8 +205,9 @@ class QuoteApp {
     this.elements.newQuoteBtn.addEventListener("click", () => this.cycleQuote());
     this.elements.favoriteBtn.addEventListener("click", () => this.toggleFavorite());
 
-    // Display initial quote
+    // Render initial quote and saved favorites list
     this.cycleQuote();
+    this.renderFavoritesList();
   }
 
   cycleQuote() {
@@ -205,6 +221,7 @@ class QuoteApp {
     const { isFavorited } = toggleFavoriteState(this.favorites, this.currentQuote.id);
     this.storageAdapter.saveFavorites([...this.favorites]);
     this.renderFavoriteButton(isFavorited);
+    this.renderFavoritesList();
   }
 
   render() {
@@ -233,6 +250,39 @@ class QuoteApp {
       this.elements.favoriteBtn.classList.remove("favorited");
     }
   }
+
+  renderFavoritesList() {
+    if (!this.elements.favoritesList || !this.elements.favoritesEmpty) return;
+
+    const favoritedQuotes = getFavoritedQuotes(this.quotes, this.favorites);
+
+    if (favoritedQuotes.length === 0) {
+      this.elements.favoritesEmpty.style.display = "block";
+      this.elements.favoritesList.style.display = "none";
+      this.elements.favoritesList.innerHTML = "";
+    } else {
+      this.elements.favoritesEmpty.style.display = "none";
+      this.elements.favoritesList.style.display = "flex";
+      this.elements.favoritesList.innerHTML = "";
+
+      favoritedQuotes.forEach(quote => {
+        const li = document.createElement("li");
+        li.className = "favorite-item";
+
+        const blockquote = document.createElement("blockquote");
+        blockquote.className = "favorite-text";
+        blockquote.textContent = `"${quote.text}"`;
+
+        const cite = document.createElement("cite");
+        cite.className = "favorite-author";
+        cite.textContent = `— ${quote.author}`;
+
+        li.appendChild(blockquote);
+        li.appendChild(cite);
+        this.elements.favoritesList.appendChild(li);
+      });
+    }
+  }
 }
 
 // Auto-initialize when running in browser
@@ -251,8 +301,8 @@ if (typeof module !== "undefined" && module.exports) {
     STORAGE_KEY,
     getRandomQuote,
     toggleFavoriteState,
+    getFavoritedQuotes,
     createStorageAdapter,
     QuoteApp
   };
 }
-
