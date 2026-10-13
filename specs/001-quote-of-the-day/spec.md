@@ -2,11 +2,11 @@
 
 **Feature Branch**: `001-quote-of-the-day`
 
-**Created**: 2026-10-12
+**Created**: 2026-10-12 (Updated: 2026-10-12)
 
-**Status**: Ready for Planning
+**Status**: Ready for Planning / Refined
 
-**Input**: User description: "A quote-of-the-day page: shows one random quote from a small built-in list, with a \"New quote\" button, and a way to mark a quote as a favorite that persists on reload."
+**Input**: User description: "A quote-of-the-day page: shows one random quote from a small built-in list, with a \"New quote\" button, and a way to mark a quote as a favorite that persists on reload. In addition, users have a visible list of favorited quotes (text and author) that updates in real time and is restored after reload."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -57,12 +57,31 @@ As a returning visitor, I want my favorited quotes to be remembered across brows
 
 ---
 
+### User Story 4 - View All Favorited Quotes in a Dedicated List (Priority: P2)
+
+As a visitor, I want to see a visible list of all my favorited quotes showing both text and author, so that I can view my saved collection in one place without having to cycle randomly hoping they appear.
+
+**Why this priority**: P2. High-value usability improvement directly addressing the user gap where favorited quotes were invisible unless re-encountered by random chance.
+
+**Independent Test**: Can be tested by favoriting quotes and observing that they appear in the favorites list with text and author; unfavoriting removes them; and reloading preserves the entire list.
+
+**Acceptance Scenarios**:
+
+1. **Given** no quotes have been marked as favorites, **When** viewing the favorites section, **Then** a clear empty-state message (e.g., "No favorite quotes yet.") is displayed.
+2. **Given** a quote is currently displayed and not yet favorited, **When** the user marks it as a favorite, **Then** the quote immediately appears in the visible favorites list with both its quote text and author attribution.
+3. **Given** a quote is in the favorites list, **When** the user unmarks that quote as a favorite, **Then** the quote is immediately removed from the visible favorites list.
+4. **Given** the user has one or more favorited quotes, **When** the browser page is reloaded, **Then** the visible favorites list is restored and displays all favorited quotes.
+
+---
+
 ### Edge Cases
 
 - **Immediate Duplicates**: When clicking "New quote", the system MUST NOT select the exact same quote that is currently displayed if there are two or more quotes in the catalog.
-- **Persistent Storage Unavailable/Blocked**: If persistent storage is disabled, unavailable, or restricted by browser privacy settings, the application MUST degrade gracefully, allowing in-memory favoriting during the current session without throwing uncaught errors.
+- **Empty Favorites List**: When zero quotes are favorited, the system MUST render a clear, accessible empty-state message rather than an empty box or broken list.
+- **All Quotes Favorited**: If every quote in the catalog is favorited, the list MUST render all items cleanly without overflow or layout breakage.
+- **Persistent Storage Unavailable/Blocked**: If persistent storage is disabled, unavailable, or restricted by browser privacy settings, the application MUST degrade gracefully, allowing in-memory favoriting and in-memory favorites list rendering during the current session without throwing uncaught errors.
 - **Empty or Corrupted Persistence Data**: If saved persistence data is corrupted or malformed, the system MUST reset to an empty favorites list without failing to load or render quotes.
-- **Rapid Clicking**: Rapid successive clicks on "New quote" or "Favorite" MUST update state reliably without desynchronizing the visual indicator and the quote data.
+- **Rapid Clicking**: Rapid successive clicks on "New quote" or "Favorite" MUST update state reliably without desynchronizing the visual indicator, the quote data, and the favorites list.
 
 ## Requirements *(mandatory)*
 
@@ -77,11 +96,17 @@ As a returning visitor, I want my favorited quotes to be remembered across brows
 - **FR-007**: System MUST allow users to remove a quote from favorites, updating persistent storage immediately.
 - **FR-008**: System MUST support full keyboard accessibility (Tab, Enter/Space) for all interactive controls, including visible focus states.
 - **FR-009**: System MUST handle storage access restrictions gracefully, ensuring uninterrupted core quote viewing and cycling.
+- **FR-010**: System MUST render a visible favorites section on the page displaying all currently favorited quotes.
+- **FR-011**: For each quote displayed in the favorites list, the system MUST show both the complete quote text and its author attribution.
+- **FR-012**: System MUST synchronize the favorites list in real time when any quote is favorited or unfavorited.
+- **FR-013**: System MUST restore and render the complete favorites list from persistent storage upon page load or reload.
+- **FR-014**: System MUST display an informative empty-state message in the favorites section when no quotes are currently favorited.
 
 ### Key Entities
 
 - **Quote**: Represents an inspirational message, containing a unique identifier, quote text, author name, and a favorite flag/state.
-- **Favorite Store**: Represents the collection of quote identifiers marked as favorites by the user, maintained across sessions.
+- **Favorite Store**: Represents the collection of quote identifiers marked as favorites by the user, maintained persistently across sessions.
+- **Favorites List View**: Represents the visual collection of favorited quote items presented in the user interface.
 
 ## Success Criteria *(mandatory)*
 
@@ -92,10 +117,13 @@ As a returning visitor, I want my favorited quotes to be remembered across brows
 - **SC-003**: 100% of favorited quotes retain their favorite status following a full page refresh.
 - **SC-004**: 100% of interactive elements are navigable and actionable using only a keyboard.
 - **SC-005**: Zero unhandled exceptions or broken visual layouts when storage operations encounter restricted or corrupted environments.
+- **SC-006**: The visible favorites list updates within 100ms of any favorite toggle action.
+- **SC-007**: 100% of favorited quotes appear in the favorites list with accurate text and author immediately upon page reload.
+- **SC-008**: The favorites list uses semantic, accessible markup (`<ul>` or `<ol>`) readable by assistive technologies.
 
 ## Assumptions
 
 - The application is a client-side web application accessible via standard modern desktop and mobile browsers.
 - No user login or remote backend service is required; persistence is scoped to the user's local browser environment.
 - The built-in quote catalog is static and embedded into the application.
-
+- The favorites list is displayed directly on the same page below the quote card or in an adjacent section for easy viewing.
